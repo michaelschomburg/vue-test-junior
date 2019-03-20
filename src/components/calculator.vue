@@ -66,7 +66,7 @@
       <button class="calculator-btn action dot" @click="addExpresion('.')">.</button>
     </div>
     <div class="calculator-col">
-      <button class="calculator-btn accent action" @click="getResult()">=</button>
+      <button class="calculator-btn accent action" @click="getResult">=</button>
     </div>
   </div>
 </div>
@@ -86,14 +86,16 @@ export default {
     },
   methods: {
         addExpresion(e) {
-            if ( Number.isInteger(this.value) )
-                this.value = '';
+            if ( Number.isInteger(this.value) ) {
+              this.value = '';
+            }
             this.value += e;
         },
         getResult() {
             let log = this.value;
             this.value = eval(this.value);
             this.logs.push( log + `=${this.value}` );
+            this.$emit('get-quote');
         },
         clear() {
             this.value = 0;
@@ -107,12 +109,12 @@ export default {
 
 <style lang="scss" scoped>
 
-    $darker: rgba(0, 0, 0, 0.07);;
-    $dark: rgba(0, 0, 0, 0.75);;
+    $light-gray: rgba(0, 0, 0, 0.07);;
+    $dark-gray: rgba(0, 0, 0, 0.75);;
     $gray: #616163;
     $white: #fff;
-    $light: rgba(61, 171, 255, 1);
-    $accent: rgba(93,216,139, 1);
+    $blue: rgba(61, 171, 255, 1);
+    $green: rgba(93,216,139, 1);
     $sd-shadow-1: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.14);
 
     *, ::after, ::before {
@@ -125,9 +127,9 @@ export default {
         display: flex;
         padding: 0;
         max-width: 320px;
-        min-width: 320px;
         flex-direction: column;
-        background-color: $darker;
+        background-color: $light-gray;
+        box-shadow: $sd-shadow-1;
 
         .calculator-logs {
         height: 80px;
@@ -145,10 +147,10 @@ export default {
                  content: '';
                  z-index: 5;
                  position: absolute;
-                 background: linear-gradient(to bottom, $darker, rgba($darker, 0));
+                 background: linear-gradient(to bottom, $light-gray, rgba($light-gray, 0));
              }
             span {
-                color: $light;
+                color: $blue;
                 opacity: .75;
                 display: block;
                 font-size: .8rem;
@@ -160,15 +162,16 @@ export default {
         }
 
         .calculator-input {
-            color: $light;
+            color: $blue;
             width: 100%;
             border: none;
-            padding: .8rem;
+            padding: 1rem;
             display: block;
             font-size: 2.4rem;
             background: none;
             text-align: right;
             font-weight: lighter;
+            box-shadow: inset -1px -1px 12px -6px rgba(0,0,0,0.55);
                 &:focus, &:active {
                           outline: none;
                 }
@@ -179,17 +182,17 @@ export default {
         padding: 0;
         justify-content: space-around;
             .calculator-col {
-                flex: 1;
+                width: 25%;
                 padding: 3px;
             &.wide {
-                flex: 2;
+                width: 50%;
                 }
             }
         }
 
         .calculator-btn {
             width: 100%;
-            color: $light;
+            color: $blue;
             border: none;
             cursor: pointer;
             padding: .8rem;
@@ -199,23 +202,26 @@ export default {
             font-weight: 200;
             justify-content: center;
             background-color: $gray;
+            box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.25);
                 &.accent {
-                    background-color: $accent;
+                    background-color: $green;
                     color: $white;
                     height: 100%;
                 }
                 &.gray {
-                    background-color: $dark;
+                    background-color: $dark-gray;
                 }
                 &.action {
+                  color: $white;
                     &.dot {
                         border-radius: 100px;
                         width: 70px;
                         height: 70px;
+                      color: $blue;
                     }
                 }
                 &:active {
-                     background-color: $darker;
+                     background-color: $light-gray;
                 }
                 &.number{
                     border-radius: 115px;

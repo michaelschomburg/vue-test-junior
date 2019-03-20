@@ -1,17 +1,34 @@
 <template>
   <div id="app">
-    <calculator msg="Welcome to Your Vue.js App"/>
-    <quote></quote>
+    <calculator v-on:get-quote="showQuote"></calculator>
+    <quote :displayQuote="quote"></quote>
   </div>
 </template>
 
 <script>
 import calculator from './components/calculator.vue'
 import quote from './components/quote.vue'
+import axios from 'axios'
 export default {
-  name: 'app',
   components: {
     calculator,quote
+  },
+  data() {
+    return {
+      errors: '',
+      quote: '',
+    }
+  },
+  methods: {
+    showQuote() {
+      axios.get('https://api.kanye.rest')
+              .then(response => {
+                this.quote = response.data.quote
+              })
+              .catch(e => {
+                this.errors.push(e)
+              })
+    }
   }
 }
 </script>
